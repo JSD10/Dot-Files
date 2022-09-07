@@ -141,7 +141,13 @@ alias cdu='cd "/run/media/joshuad/USB Drive/"'
 #PS1='\w/ $ '  
 alias q='exit' 
 
+alias calc='calcurse'
+
 # Let there be color in grep!
 export GREP_OPTIONS=' — color=auto'
 # Set Vim as my default editor
 export EDITOR=vim
+
+alias tuir='tuir --enable-media'
+
+bind "set completion-ignore-case on"
