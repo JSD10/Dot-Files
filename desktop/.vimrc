@@ -4,13 +4,18 @@ Plug 'sheerun/vim-polyglot'
 Plug 'junegunn/goyo.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'dkarter/bullets.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/syntastic'
 Plug 'junegunn/fzf'
-Plug 'morhetz/gruvbox' 
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'morhetz/gruvbox'
+Plug 'preservim/nerdcommenter'
+Plug 'heavenshell/vim-pydocstring', { 'do': 'make install', 'for': 'python' }
+Plug 'github/copilot.vim'
+Plug 'is0n/jaq-nvim'
 call plug#end()
 
 set statusline+=%#warningmsg#
@@ -23,97 +28,118 @@ let g:syntastic_check_on_wq = 0
 
 let g:syntastic_enable_signs=1
 
-let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
-
-"alacritty stuff
-        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-        let &t_8b = "\<Esc>[48:2;%lu;%lu;%lum"
-         set ttymouse=sgr
+"let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
 
 "leader key
 let mapleader = ","
 
-autocmd vimenter * ++nested colorscheme gruvbox
-set bg=dark
+"autocmd vimenter * ++nested colorscheme gruvbox 
+"set bg=dark
 
 " For COC
-  set hidden
-   set nobackup
-    set nowritebackup
-     set cmdheight=2
-      set updatetime=300
-       set shortmess+=c
-        set signcolumn=yes
+ set hidden
+ set nobackup
+ set nowritebackup
+ set cmdheight=2
+ set updatetime=300
+ set shortmess+=c
+ set signcolumn=yes
 
-        set encoding=UTF-8
+set encoding=UTF-8
 
-        set mouse=a
+set mouse=a
 
+"set termguicolors 
 
-        let g:airline_theme='gruvbox'
+"let g:airline_theme='gruvbox'
 
-     "  set termguicolors
+map <C-g> :Goyo<CR>
+map <C-f> :NERDTreeToggle<CR>
+map <C-i> gt
 
+set number relativenumber
+set nu rnu
 
+highlight LineNr term=bold cterm=NONE ctermfg=16 ctermbg=17 gui=NONE
+highlight EndOfBuffer ctermfg=17 ctermbg=16
+"statusline
+set laststatus=2
+set statusline=
+set noshowmode
 
-       map <C-g> :Goyo<CR>
-        map <C-f> :NERDTreeToggle<CR>
-        map <C-i> gt
+let g:currentmode={
+       \ 'n'  : 'NORMAL ',
+       \ 'v'  : 'VISUAL ',
+       \ 'V'  : 'VISUAL (LINE) ',
+       \ "\<C-V>" : 'VISUAL (BLOCK) ',
+       \ 'i'  : 'INSERT ',
+       \ 'R'  : 'REPLACE ',
+       \ 'Rv' : 'REPLACE ',
+       \ 'c'  : 'COMMAND ',
+       \}
 
-       set number relativenumber
-       set nu rnu
+hi statuslinenumberhi ctermfg=0 ctermbg=16 
+hi statuslinemodehi ctermfg=0 ctermbg=17
 
-       " Highlight cursor line underneath the cursor horizontally.
-       set cursorline
-
-        " Highlight cursor line underneath the cursor vertically.
-        set cursorcolumn
-
-        " Do not save backup files.
-        set nobackup
-
-        " Do not wrap lines. Allow long lines to extend as far as the line  goes.
-        set nowrap
-
-        " While searching though a file incrementally highlight matching  characters as you type.
-        set incsearch
-
-        " Ignore capital letters during search.
-        set ignorecase
-
-        " Override the ignorecase option if searching for capital letters.
-        " This will allow you to search specifically for capital letters.
-        set smartcase
-
-        " Type jj to exit insert mode quickly.
-        inoremap jj <Esc>
-
-        " Press the space bar to type the : character in command mode.
-        nnoremap <space> :
+set statusline+=%#statuslinenumberhi#
+set statusline+=%3.3l\ 
+set statusline+=%#statuslinemodehi#
+set statusline+=%{g:currentmode[mode()]}
+set statusline+=%=%F%{&modified?'*':''}
 
 
-        " Note: You must define the dictionary first before setting values.
-        " Also, it's a good idea to check whether it exists as to avoid
-        " accidentally overwriting its contents.
 
-        if !exists('g:airline_symbols')
-          let g:airline_symbols = {}
-          endif
+" Highlight cursor line underneath the cursor horizontally.
+"set cursorline
 
-          " powerline symbols
-          let g:airline_left_sep = ''
-          let g:airline_left_alt_sep = ''
-          let g:airline_right_sep = ''
-          let g:airline_right_alt_sep = ''
-          let g:airline_symbols.branch = ''
-          let g:airline_symbols.readonly = ''
-          let g:airline_symbols.linenr = '☰'
-          let g:airline_symbols.maxlinenr = ''
-          let g:airline_symbols.dirty='⚡'
+" Highlight cursor line underneath the cursor vertically.
+set cursorcolumn
 
-          " If you only see boxes here it may be because your system doesn't          have
-          " the correct fonts. Try it in vim first and if that fails see the help
-          " pages for vim-airline :help airline-troubleshooting
+" Do not save backup files.
+set nobackup
+
+" Do not wrap lines. Allow long lines to extend as far as the line goes.
+set nowrap
+
+" While searching though a file incrementally highlight matching characters as you type.
+set incsearch
+
+" Ignore capital letters during search.
+set ignorecase
+
+" Override the ignorecase option if searching for capital letters.
+" This will allow you to search specifically for capital letters.
+set smartcase
+
+" Type jj to exit insert mode quickly.
+inoremap jj <Esc>
+
+" Press the space bar to type the : character in command mode.
+nnoremap <space> :
+
+
+" Note: You must define the dictionary first before setting values.
+" Also, it's a good idea to check whether it exists as to avoid
+" accidentally overwriting its contents.
+
+"if !exists('g:airline_symbols')
+"  let g:airline_symbols = {}
+"endif
+
+" powerline symbols
+"let g:airline_left_sep = ''
+"let g:airline_left_alt_sep = ''
+"let g:airline_right_sep = ''
+"let g:airline_right_alt_sep = ''
+"let g:airline_symbols.branch = ''
+"let g:airline_symbols.readonly = ''
+"let g:airline_symbols.linenr = '☰'
+"let g:airline_symbols.maxlinenr = ''
+"let g:airline_symbols.dirty='⚡'
+
+" If you only see boxes here it may be because your system doesn't have
+" the correct fonts. Try it in vim first and if that fails see the help
+" pages for vim-airline :help airline-troubleshooting
 
 func! WordProcessor()
   " movement changes
@@ -133,15 +159,8 @@ func! WordProcessor()
 endfu
 com! WP call WordProcessor()
 
-        au InsertLeave * silent execute "!echo -en \<esc>[2 q"
-        au InsertEnter * silent execute "!echo -en \<esc>[5 q"
-
-
-
-
-
-
-
+au InsertLeave * silent execute "!echo -en \<esc>[2 q" 
+au InsertEnter * silent execute "!echo -en \<esc>[5 q"
 
 " CoC Stuff
 
@@ -318,3 +337,36 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " compiling and running automatically on control r
 map <C-r> <Esc>:w<CR> <bar> !clear && g++ -Wall % -o %:r && ./%:r<CR>
+
+"autocompile and run python code
+autocmd FileType python map <buffer> <C-r> :w<CR>:exec '!clear && python3' shellescape(@%, 1)<CR>
+autocmd FileType python imap <buffer> <C-r> <esc>:w<CR>:exec '!clear && python3' shellescape(@%, 1)<CR>
+
+
+
+set clipboard=unnamedplus
+
+filetype plugin on
+
+"commenter
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+
+
+"control a to select all
+nnoremap <C-A> ggVG
